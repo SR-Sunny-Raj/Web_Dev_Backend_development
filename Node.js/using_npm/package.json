@@ -1,0 +1,21 @@
+{
+  "name": "using_npm",
+  "version": "1.0.0",
+  "description": "Best Package made till date",
+  "main": "using_npm.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "awesome"
+  ],
+  "author": "Sunny Raj",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "slugify": "^1.5.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.8"
+  }
+}
