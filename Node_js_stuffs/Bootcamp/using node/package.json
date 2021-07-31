@@ -1,0 +1,21 @@
+{
+  "name": "using-node",
+  "version": "1.0.0",
+  "description": "Using node after learning from udemy",
+  "main": "index1.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bhau",
+    "apan",
+    "node",
+    "sikhenge"
+  ],
+  "author": "Sunny Raj",
+  "license": "ISC",
+  "dependencies": {
+    "superheroes": "^3.0.0",
+    "supervillains": "^3.0.0"
+  }
+}
