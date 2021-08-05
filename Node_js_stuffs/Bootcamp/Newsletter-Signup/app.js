@@ -28,10 +28,10 @@ app.post('/', (req, res) => {
     ],
   };
   const jsonData = JSON.stringify(data);
-  const url = 'https://us6.api.mailchimp.com/3.0/lists/4d11fa2cf0';
+  const url = 'https://us6.api.mailchimp.com/3.0/lists/List-ID';
   const options = {
     method: 'POST',
-    auth: 'sunny:f50a338f085467ba9dbdee3222be5f91-us6',
+    auth: 'sunny:API-Key',
   };
 
   const request = https.request(url, options, function (response) {
@@ -53,9 +53,3 @@ app.post('/', (req, res) => {
 app.listen(3000, () => {
   console.log('Server listening at port 3000');
 });
-
-// API Key
-// f50a338f085467ba9dbdee3222be5f91-us6
-
-// List ID
-// 4d11fa2cf0
