@@ -2,8 +2,24 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const _ = require('lodash');
 const ejs = require('ejs');
+// getting-started.js
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/blogpostDB', {useNewUrlParser: true, useUnifiedTopology: true});
 
-let posts = [];
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  // we're connected!
+});
+
+const blogschema = new mongoose.Schema({
+  title: String,
+  content: String
+});
+
+const Blog = mongoose.model('Blog', blogschema);
+
+// let posts = [];
 const homeStartingContent =
   'Lacus vel facilisis volutpat est velit egestas dui id ornare. Semper auctor neque vitae tempus quam. Sit amet cursus sit amet dictum sit amet justo. Viverra tellus in hac habitasse. Imperdiet proin fermentum leo vel orci porta. Donec ultrices tincidunt arcu non sodales neque sodales ut. Mattis molestie a iaculis at erat pellentesque adipiscing. Magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies. Adipiscing elit ut aliquam purus sit amet luctus venenatis lectus. Ultrices vitae auctor eu augue ut lectus arcu bibendum at. Odio euismod lacinia at quis risus sed vulputate odio ut. Cursus mattis molestie a iaculis at erat pellentesque adipiscing.';
 const aboutContent =
@@ -19,10 +35,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  res.render('home', {
-    startingContent: homeStartingContent,
-    posts: posts,
-  });
+  Blog.find({}, (err,foundItem)=>{
+    res.render('home', {
+      startingContent: homeStartingContent,
+      posts: foundItem,
+    });
+  })
 });
 
 app.get('/about', (req, res) => {
@@ -37,24 +55,26 @@ app.get('/compose', (req, res) => {
   res.render('compose');
 });
 
-app.get('/posts/:topic', (req, res) => {
-  posts.forEach(function (element) {
-    if (_.lowerCase(req.params.topic) === _.lowerCase(element.title)) {
-      res.render('post', {
-        heading: element.title,
-        postContent: element.content,
+app.get('/posts/:postId', (req, res) => {
+  const requestedPostId = req.params.postId;
+  Blog.findOne({ _id: requestedPostId }, (err, foundPost) => {
+    res.render('post', {
+      heading: foundPost.title,
+      postContent: foundPost.content,
+    });
       });
-    }
-  });
 });
 
 app.post('/compose', (req, res) => {
-  const post = {
+  const posts = new Blog({
     title: req.body.tText,
     content: req.body.pText,
-  };
-  posts.push(post);
-  res.redirect('/');
+  });
+  posts.save((err) => {
+    if (!err) {
+      res.redirect('/');
+    }
+  });
 });
 
 app.listen(3000, function () {
